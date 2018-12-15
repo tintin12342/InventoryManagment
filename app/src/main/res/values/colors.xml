@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#083E8E</color> //text white
+    <color name="colorPrimaryDark">#001960</color> //text white
+    <color name="colorPrimaryLight">#4E68BF</color> //text white and black
+    
+    <color name="colorSecondary">#82CECA</color> //text black
+    <color name="colorSecondaryDark">#519D99</color> //text black and white
+    <color name="colorSecondaryLight">#B4FFFD</color> //text black
+
+    <color name="textColor">#CC000000</color>
+    <color name="colorRed">#db2020</color>
+    <color name="colorYellow">#FFCF79</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="offWhite">#EFEFEF</color>
+    <color name="borderColor">#CCCCCC</color>
+    <color name="colorBlack">#000000</color>
+    <color name="offBlack">#555555</color>
+    <color name="hintColor">#E2E2E2</color>
+</resources>

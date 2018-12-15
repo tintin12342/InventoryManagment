@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Traži"
+        android:id="@+id/navTrazi"
+        android:icon="@drawable/ic_search_black_24dp"/>
+
+    <item
+        android:title="Lista"
+        android:id="@+id/navLista"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"/>
+
+    <item
+        android:title="Dodaj"
+        android:id="@+id/navDodaj"
+        android:icon="@drawable/ic_add_black_24dp"/>
+
+</menu>

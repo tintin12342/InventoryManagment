@@ -1,0 +1,602 @@
+package com.example.adi.inventorymanagment;
+
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import es.dmoral.toasty.Toasty;
+
+import static android.app.Activity.RESULT_OK;
+
+
+public class PodaciProizvodaFragment extends Fragment implements View.OnClickListener {
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private LinearLayout linlay4;
+    private LinearLayout linlay5;
+    private LinearLayout linlayBtn;
+    private LinearLayout linlayProgress;
+    private TextView mCijena;
+    private TextView mCijenaSum;
+    private TextView mKolicina;
+    private TextView mId;
+    private TextView mImeProizvoda;
+    private TextView mOpisProizvoda;
+    private TextView mDatum;
+    private Button mZbrojBtn;
+    private Button mOduzmiBtn;
+    private EditText mBrojEditText;
+    private ImageView mSlikaProizvoda;
+    private Button mSpremiSlikuBtn;
+    private Uri mImageUri;
+    private ProgressBar mProgressBar;
+
+    @ServerTimestamp
+    Date time;
+
+    private FirebaseFirestore db;
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
+    private StorageTask mUploadTask;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_podaci_proizvoda, container, false);
+
+        if (getActivity() != null && ((AppCompatActivity) getActivity()).getSupportActionBar() != null){
+            Toolbar toolbar = v.findViewById(R.id.toolbar);
+            toolbar.setTitle("Podaci Proizvoda");
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getActivity().onBackPressed();
+                }
+            });
+        }
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("slike");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("slike");
+
+        linlay4 = v.findViewById(R.id.linlay4);
+        linlay5 = v.findViewById(R.id.linlay5);
+        linlayBtn = v.findViewById(R.id.linlayBtn);
+        linlayProgress = v.findViewById(R.id.linlayProgress);
+        mId = v.findViewById(R.id.ppId);
+        mImeProizvoda = v.findViewById(R.id.ppImeProizvoda);
+        mOpisProizvoda = v.findViewById(R.id.ppOpis);
+        mCijena = v.findViewById(R.id.ppCijena);
+        mDatum = v.findViewById(R.id.ppDatum);
+        mCijenaSum = v.findViewById(R.id.ppCijenaSum);
+        mKolicina = v.findViewById(R.id.ppKolicina);
+        mSlikaProizvoda = v.findViewById(R.id.imageViewPP);
+        mSpremiSlikuBtn = v.findViewById(R.id.spremiSlikuBtn);
+        mProgressBar = v.findViewById(R.id.progressBarPP);
+
+        linlay4.setOnClickListener(this);
+        linlay5.setOnClickListener(this);
+        mSlikaProizvoda.setOnClickListener(this);
+        mSpremiSlikuBtn.setOnClickListener(this);
+
+        slanjePodataka();
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            db = FirebaseFirestore.getInstance();
+            String documentId = bundle.getString("documentId");
+
+            DocumentReference docRef = db.collection("Proizvodi").document(documentId);
+            docRef.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String urlSlike = documentSnapshot.getString("urlSlike");
+                            if (mSlikaProizvoda != null) {
+                                Picasso.get()
+                                        .load(urlSlike)
+                                        .fit()
+                                        .centerCrop()
+                                        .into(mSlikaProizvoda);
+                            }
+                        }
+                    });
+        }
+        return v;
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void spremiSliku() {
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            CharSequence kodProizvoda = bundle.getCharSequence("id");
+            if (mImageUri != null){
+                final StorageReference fileRef = mStorageRef.child(kodProizvoda
+                        + "."
+                        + getFileExtension(mImageUri));
+
+                mUploadTask = fileRef.putFile(mImageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mProgressBar.setProgress(0);
+                                            }
+                                        }, 500);
+
+                                        Toasty.success(requireContext(),
+                                                "Slika spremljena",
+                                                Toast.LENGTH_SHORT).show();
+                                        db = FirebaseFirestore.getInstance();
+
+                                        Bundle bundle = getArguments();
+                                        if (bundle != null) {
+                                            String documentId = bundle.getString("documentId");
+                                            String uploadId = mDatabaseRef.push().getKey();
+                                            String urlSlike = uri.toString();
+                                            mDatabaseRef.child(uploadId).setValue(urlSlike);
+
+                                            if (documentId != null){
+                                                db.collection("Proizvodi").document(documentId)
+                                                        .update("urlSlike", urlSlike);
+                                            }else {
+                                                Toasty.warning(getContext(),
+                                                        "Pokušajte ponovno",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            linlayBtn.setVisibility(View.GONE);
+                                            linlayProgress.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                double progress = (100.0 * taskSnapshot.getBytesTransferred()
+                                        / taskSnapshot.getTotalByteCount());
+                                mProgressBar.setProgress((int) progress);
+                            }
+                        });
+            } else {
+                Toasty.info(requireContext(),
+                        "Niste odabrali sliku",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void odaberiSliku() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+
+            Picasso.get()
+                    .load(mImageUri)
+                    .fit()
+                    .centerCrop()
+                    .into(mSlikaProizvoda);
+        }
+    }
+
+    private void slanjePodataka(){
+        final Bundle bundle = this.getArguments();
+        final String kn = " KN";
+
+        if (bundle != null){
+            CharSequence id = bundle.getCharSequence("id");
+            mId.setText(id);
+
+            CharSequence imeProizvoda = bundle.getCharSequence("imeProizvoda");
+            mImeProizvoda.setText(imeProizvoda);
+
+            CharSequence opisProizvoda = bundle.getCharSequence("opisProizvoda");
+            mOpisProizvoda.setText(opisProizvoda);
+
+            int kolicina = bundle.getInt("kolicina");
+            mKolicina.setText(String.valueOf(kolicina));
+
+            float cijena = bundle.getFloat("cijena");
+            mCijena.setText(String.valueOf(cijena));
+
+            float cijenaSum = bundle.getFloat("cijenaSum");
+            mCijenaSum.setText(String.valueOf(cijenaSum) + kn);
+
+            CharSequence datum = bundle.getCharSequence("datum");
+            mDatum.setText(datum);
+        }
+
+        mCijena.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String id = mId.getText().toString().trim();
+                String imeProizvoda = mImeProizvoda.getText().toString().trim();
+                String opisProizvoda = mOpisProizvoda.getText().toString().trim();
+                String kolicina = mKolicina.getText().toString().trim();
+                String cijena = mCijena.getText().toString().trim();
+                String datum = mDatum.getText().toString().trim();
+                String kn = " KN";
+
+                Proizvodi p = new Proizvodi(
+                        imeProizvoda,
+                        opisProizvoda,
+                        id,
+                        Integer.parseInt(kolicina),
+                        Float.parseFloat(cijena),
+                        datum,
+                        null);
+
+                int kolicinaBroj = p.getKolicina();
+                float cijenaBroj = p.getCijena();
+                float cijenaSum = kolicinaBroj * cijenaBroj;
+
+                mCijenaSum.setText(String.valueOf(cijenaSum) + kn);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                db = FirebaseFirestore.getInstance();
+
+                if (bundle != null){
+                    String documentId = bundle.getString("documentId");
+
+                    String id = mId.getText().toString().trim();
+                    String imeProizvoda = mImeProizvoda.getText().toString().trim();
+                    String opisProizvoda = mOpisProizvoda.getText().toString().trim();
+                    String kolicina = mKolicina.getText().toString().trim();
+                    String cijena = mCijena.getText().toString().trim();
+                    String datum = mDatum.getText().toString().trim();
+
+                    Proizvodi p = new Proizvodi(
+                            imeProizvoda,
+                            opisProizvoda,
+                            id,
+                            Integer.parseInt(kolicina),
+                            Float.parseFloat(cijena),
+                            datum,
+                            null);
+
+                    if (documentId != null){
+                        db.collection("Proizvodi").document(documentId)
+                                .update("cijena", p.getCijena());
+                    }else {
+                        Toasty.warning(getContext(),
+                                "Pokušajte ponovno",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        mKolicina.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String id = mId.getText().toString().trim();
+                String imeProizvoda = mImeProizvoda.getText().toString().trim();
+                String opisProizvoda = mOpisProizvoda.getText().toString().trim();
+                String kolicina = mKolicina.getText().toString().trim();
+                String cijena = mCijena.getText().toString().trim();
+                String datum = mDatum.getText().toString().trim();
+                String kn = " KN";
+
+                Proizvodi p = new Proizvodi(
+                        imeProizvoda,
+                        opisProizvoda,
+                        id,
+                        Integer.parseInt(kolicina),
+                        Float.parseFloat(cijena),
+                        datum,
+                        null);
+
+                int kolicinaBroj = p.getKolicina();
+                float cijenaBroj = p.getCijena();
+                float cijenaSum = kolicinaBroj * cijenaBroj;
+
+                mCijenaSum.setText(String.valueOf(cijenaSum) + kn);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                db = FirebaseFirestore.getInstance();
+
+                if (bundle != null){
+                    String documentId = bundle.getString("documentId");
+
+                    String id = mId.getText().toString().trim();
+                    String imeProizvoda = mImeProizvoda.getText().toString().trim();
+                    String opisProizvoda = mOpisProizvoda.getText().toString().trim();
+                    String kolicina = mKolicina.getText().toString().trim();
+                    String cijena = mCijena.getText().toString().trim();
+                    String datum = mDatum.getText().toString().trim();
+
+                    Proizvodi p = new Proizvodi(
+                            imeProizvoda,
+                            opisProizvoda,
+                            id,
+                            Integer.parseInt(kolicina),
+                            Float.parseFloat(cijena),
+                            datum,
+                            null);
+
+                    if (documentId != null){
+                        db.collection("Proizvodi").document(documentId)
+                                .update("kolicina", p.getKolicina());
+                    }else {
+                        Toasty.warning(getContext(),
+                                "Pokušajte ponovno",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void bottomSheetDialog(){
+        final BottomSheetDialog bDialog = new BottomSheetDialog(requireContext());
+        View v = getLayoutInflater().inflate(R.layout.podaci_proizvoda_bottom_sheet, null);
+        bDialog.setContentView(v);
+        bDialog.show();
+
+        mBrojEditText = v.findViewById(R.id.BSeditText);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                100
+        );
+        params.setMargins(60,20,60,40);
+
+        if (getActivity() != null){
+            Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
+
+            mZbrojBtn = v.findViewById(R.id.BSzbrojBtn);
+            mOduzmiBtn = v.findViewById(R.id.BSoduzmiBtn);
+            mZbrojBtn.setTypeface(face);
+            mOduzmiBtn.setTypeface(face);
+        }
+
+        String promjena = "Promijenite cijenu";
+        String upis = "Upišite cijenu";
+        String promjenaBtn = "Promijenite";
+
+        TextView mBSTV = v.findViewById(R.id.BSTV);
+        if (linlay4.isPressed()){
+            mBSTV.setText(promjena);
+            mBSTV.setPadding(0, 0, 20,0);
+            mBrojEditText.setHint(upis);
+            mZbrojBtn.setText(promjenaBtn);
+            mZbrojBtn.setLayoutParams(params);
+            mOduzmiBtn.setVisibility(View.GONE);
+
+            mBrojEditText.setInputType(InputType.TYPE_CLASS_NUMBER
+                    | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            mZbrojBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    zbrojBtnAnimacija();
+                    mijenjanjeCijene();
+                }
+            });
+
+        }else if (linlay5.isPressed()){
+
+            mBrojEditText.setHint("Upišite količinu");
+
+
+            mZbrojBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    zbrojBtnAnimacija();
+                    zbrajanjeKolicine();
+                }
+            });
+
+            mOduzmiBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    oduzmiBtnAnimacija();
+                    oduzimanjeKolicine();
+                }
+            });
+        }
+
+    }
+
+    private void mijenjanjeCijene(){
+        String text = mBrojEditText.getText().toString();
+        if (TextUtils.isEmpty(text)){
+            mBrojEditText.setError("Polje je prazno");
+            mBrojEditText.requestFocus();
+        } else {
+            float upisaniBroj = Float.parseFloat(mBrojEditText.getText().toString().trim());
+            mCijena.setText(Float.toString(upisaniBroj));
+        }
+    }
+
+    private void zbrajanjeKolicine(){
+        String text = mBrojEditText.getText().toString();
+        if (TextUtils.isEmpty(text)){
+            mBrojEditText.setError("Polje je prazno");
+            mBrojEditText.requestFocus();
+        } else {
+            int upisaniBroj = Integer.parseInt(mBrojEditText.getText().toString().trim());
+            String kolicinaBroj = mKolicina.getText().toString();
+            int broj = Integer.parseInt(kolicinaBroj);
+            int kolicinaHolder = upisaniBroj + broj;
+
+            mKolicina.setText(Integer.toString(kolicinaHolder));
+        }
+    }
+
+    private void oduzimanjeKolicine(){
+        String text = mBrojEditText.getText().toString();
+        if (TextUtils.isEmpty(text)){
+            mBrojEditText.setError("Polje je prazno");
+            mBrojEditText.requestFocus();
+        } else {
+            int upisaniBroj = Integer.parseInt(mBrojEditText.getText().toString().trim());
+            String kolicinaBroj = mKolicina.getText().toString();
+            int broj = Integer.parseInt(kolicinaBroj);
+            int kolicinaHolder = broj - upisaniBroj;
+
+            if (kolicinaHolder < 0){
+                mKolicina.setText("0");
+            }else {
+                mKolicina.setText(Integer.toString(kolicinaHolder));
+            }
+        }
+    }
+
+    private void zbrojBtnAnimacija() {
+        mZbrojBtn.setScaleX((float) 0.9);
+        mZbrojBtn.setScaleY((float) 0.9);
+        mZbrojBtn.animate().scaleX(1).scaleY(1).start();
+    }
+
+    private void oduzmiBtnAnimacija() {
+        mOduzmiBtn.setScaleX((float) 0.9);
+        mOduzmiBtn.setScaleY((float) 0.9);
+        mOduzmiBtn.animate().scaleX(1).scaleY(1).start();
+    }
+
+    private void cijenaAnimacija() {
+        linlay4.setScaleX((float) 0.9);
+        linlay4.setScaleY((float) 0.9);
+        linlay4.animate().scaleX(1).scaleY(1).start();
+    }
+
+    private void kolicinaAnimacija() {
+        linlay5.setScaleX((float) 0.9);
+        linlay5.setScaleY((float) 0.9);
+        linlay5.animate().scaleX(1).scaleY(1).start();
+    }
+
+    private void spremiSlikuuAnimacija() {
+        mSpremiSlikuBtn.setScaleX((float) 0.9);
+        mSpremiSlikuBtn.setScaleY((float) 0.9);
+        mSpremiSlikuBtn.animate().scaleX(1).scaleY(1).start();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.linlay4:
+                cijenaAnimacija();
+                bottomSheetDialog();
+                break;
+            case R.id.linlay5:
+                kolicinaAnimacija();
+                bottomSheetDialog();
+                break;
+            case R.id.spremiSlikuBtn:
+                spremiSlikuuAnimacija();
+                if (mUploadTask != null && mUploadTask.isInProgress()) {
+                    Toast.makeText(requireContext(),
+                            "Slika se sprema",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    spremiSliku();
+                }
+                break;
+            case R.id.imageViewPP:
+                if (mSlikaProizvoda.isPressed()){
+                    Animation animation = AnimationUtils.loadAnimation(requireContext(), android.R.anim.fade_in);
+                    linlayBtn.setAnimation(animation);
+                    linlayBtn.setVisibility(View.VISIBLE);
+                    linlayProgress.setAnimation(animation);
+                    linlayProgress.setVisibility(View.VISIBLE);
+                }
+                odaberiSliku();
+                break;
+        }
+    }
+
+}

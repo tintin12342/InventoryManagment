@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/offWhite"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:id="@+id/BStextViewLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/BSTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/bottomSheetCK"
+            android:textColor="@color/colorBlack"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/BSeditTextLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/BStextViewLinearLayout">
+
+        <EditText
+            android:id="@+id/BSeditText"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/edittext_background_classic"
+            android:ems="12"
+            android:hint="@string/upisiteBroj"
+            android:inputType="number"
+            android:maxLength="9"
+            android:padding="12dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/BSeditTextLinearLayout"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:gravity="center_horizontal"
+        style="?android:attr/buttonBarStyle">
+
+        <Button
+            android:id="@+id/BSoduzmiBtn"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            android:background="@drawable/secondary"
+            android:text="@string/prodano"
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:id="@+id/BSzbrojBtn"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            android:background="@drawable/primary"
+            android:layout_marginStart="50dp"
+            android:text="@string/izradeno"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
