@@ -5,22 +5,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Explode;
+import androidx.transition.Fade;
+import androidx.transition.Slide;
+import androidx.transition.TransitionInflater;
+import androidx.transition.TransitionSet;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,7 +33,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +44,6 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
     @ServerTimestamp
     Date time;
     private int lastPosition = -1;
-    private FirebaseFirestore db;
 
     public ProizvodiAdapter(Context mCtx, List<Proizvodi> proizvodiList){
         this.mCtx = mCtx;
@@ -67,7 +67,9 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
         holder.mImeProizvoda.setText(proizvodi.getImeProizvoda());
         holder.mId.setText(proizvodi.getId());
 
-        db = FirebaseFirestore.getInstance();
+        animacijaDijelovaListe(holder);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Proizvodi").document(proizvodi.getDocumentId());
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -102,13 +104,16 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
 
         TextView mImeProizvoda, mId;
         ImageView mImage;
+        TextView imeTV, kodTV;
 
-        public ProizvodiViewHolder(View v){
+        private ProizvodiViewHolder(View v){
             super(v);
 
             mImeProizvoda = v.findViewById(R.id.imeProizvoda);
             mId = v.findViewById(R.id.id);
             mImage = v.findViewById(R.id.imageViewProizvod);
+            imeTV = v.findViewById(R.id.textView3);
+            kodTV = v.findViewById(R.id.textView2);
 
             v.setOnClickListener(this);
         }
@@ -181,6 +186,43 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
     public void filtriranaLista(ArrayList<Proizvodi> filtriranaLista){
         proizvodiList = filtriranaLista;
         notifyDataSetChanged();
+    }
+
+    private void animacijaDijelovaListe(ProizvodiViewHolder holder){
+        holder.mImage.setScaleX((float) 0.0);
+        holder.mImage.setScaleY((float) 0.0);
+        holder.mImage.setAlpha(0f);
+        holder.mId.setAlpha(0f);
+        holder.mImeProizvoda.setAlpha(0f);
+        holder.imeTV.setAlpha(0f);
+        holder.kodTV.setAlpha(0f);
+
+        holder.mImage.animate()
+                .setStartDelay(200)
+                .setDuration(250)
+                .scaleX(1).scaleY(1)
+                .alpha(1f)
+                .start();
+
+        holder.mId.animate()
+                .setDuration(250)
+                .alpha(1f)
+                .start();
+
+        holder.mImeProizvoda.animate()
+                .setDuration(250)
+                .alpha(1f)
+                .start();
+
+        holder.imeTV.animate()
+                .setDuration(250)
+                .alpha(1f)
+                .start();
+
+        holder.kodTV.animate()
+                .setDuration(250)
+                .alpha(1f)
+                .start();
     }
 
 }

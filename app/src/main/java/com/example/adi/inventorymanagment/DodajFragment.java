@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -72,7 +74,7 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
         if (getActivity() != null){
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
 
-            mAzurirajBtn = v.findViewById(R.id.azurirajBtn);
+            mAzurirajBtn = v.findViewById(R.id.azurirajBtnDodaj);
             mAzurirajBtn.setTypeface(face);
         }
 
@@ -245,21 +247,27 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
         mDaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                daBtnAnimacija();
-                if (getActivity() != null){
-                    FirebaseAuth.getInstance().signOut();
-                    getActivity().finish();
-                    Intent intent = new Intent(getContext(), LogInActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
+                animacijaGumbi("Da");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getActivity() != null){
+                            FirebaseAuth.getInstance().signOut();
+                            getActivity().finish();
+                            Intent intent = new Intent(getContext(), LogInActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                    }
+                }, 500);
+
             }
         });
 
         mNeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                neBtnAnimacija();
+                animacijaGumbi("Ne");
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -272,7 +280,7 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.odjava_menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
 
     }
@@ -283,29 +291,31 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
-    public void azurirajBtnAnimacija() {
-        mAzurirajBtn.setScaleX((float) 0.9);
-        mAzurirajBtn.setScaleY((float) 0.9);
-        mAzurirajBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void daBtnAnimacija() {
-        mDaBtn.setScaleX((float) 0.9);
-        mDaBtn.setScaleY((float) 0.9);
-        mDaBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void neBtnAnimacija() {
-        mNeBtn.setScaleX((float) 0.9);
-        mNeBtn.setScaleY((float) 0.9);
-        mNeBtn.animate().scaleX(1).scaleY(1).start();
+    private void animacijaGumbi(String checker){
+        switch (checker){
+            case "Spremi":
+                mAzurirajBtn.setScaleX((float) 0.9);
+                mAzurirajBtn.setScaleY((float) 0.9);
+                mAzurirajBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Da":
+                mDaBtn.setScaleX((float) 0.9);
+                mDaBtn.setScaleY((float) 0.9);
+                mDaBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Ne":
+                mNeBtn.setScaleX((float) 0.9);
+                mNeBtn.setScaleY((float) 0.9);
+                mNeBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.azurirajBtn:
-                azurirajBtnAnimacija();
+            case R.id.azurirajBtnDodaj:
+                animacijaGumbi("Spremi");
                 spremiProizvod();
                 sakriKeyboard();
                 break;

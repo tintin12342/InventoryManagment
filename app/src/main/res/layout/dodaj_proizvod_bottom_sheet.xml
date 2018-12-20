@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLayoutBS"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,9 +42,10 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:ignore="Autofill"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +60,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout1">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,9 +83,10 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:ignore="Autofill"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -99,7 +101,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout2">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -123,9 +125,10 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:ignore="Autofill"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -140,7 +143,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout3">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,9 +167,10 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:ignore="Autofill"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -181,7 +185,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout4">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -205,9 +209,10 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:ignore="Autofill"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -250,4 +255,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

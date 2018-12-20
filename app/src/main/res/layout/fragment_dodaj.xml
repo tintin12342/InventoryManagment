@@ -8,7 +8,7 @@
     android:background="@color/offWhite"
     android:fillViewport="true">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".DodajProizvod">
@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -44,15 +44,15 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
+                tools:ignore="Autofill"
                 app:layout_constraintBottom_toTopOf="@+id/imeProizvodaEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/trazenjeProizvoda" />
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -78,14 +78,15 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
+                tools:ignore="Autofill"
                 app:layout_constraintBottom_toTopOf="@+id/opisEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container1" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -111,14 +112,15 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
+                tools:ignore="Autofill"
                 app:layout_constraintBottom_toTopOf="@+id/kolicinaEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container2" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -145,15 +147,16 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
+                tools:ignore="Autofill"
                 app:layout_constraintBottom_toTopOf="@+id/cijenaEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container3" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -180,14 +183,15 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
+                tools:ignore="Autofill"
                 app:layout_constraintBottom_toTopOf="@+id/datumEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container4" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -214,15 +218,16 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
-                app:layout_constraintBottom_toTopOf="@+id/azurirajBtn"
+                tools:ignore="Autofill"
+                app:layout_constraintBottom_toTopOf="@+id/azurirajBtnDodaj"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container5" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/azurirajBtn"
+            android:id="@+id/azurirajBtnDodaj"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginBottom="8dp"
@@ -241,5 +246,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/container6" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

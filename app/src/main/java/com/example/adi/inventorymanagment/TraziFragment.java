@@ -5,15 +5,17 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,7 +88,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         mTraziBtn = v.findViewById(R.id.traziBtn);
         mScanBtn = v.findViewById(R.id.skenirajBtn);
         mDodajBtn = v.findViewById(R.id.dodajBtn);
-        mAzurirajBtn = v.findViewById(R.id.azurirajBtn);
+        mAzurirajBtn = v.findViewById(R.id.azurirajBtnDodaj);
         mTraziEditText = v.findViewById(R.id.traziEditText);
 
         mProgressBar.setVisibility(View.GONE);
@@ -112,7 +114,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         return v;
     }
 
-    public void azurirajProizvod(){
+    private void azurirajProizvod(){
         String idProizvoda = mTraziEditText.getText().toString();
 
         if (TextUtils.isEmpty(idProizvoda)){
@@ -184,7 +186,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void traziProizvod(){
+    private void traziProizvod(){
         String idProizvoda = mTraziEditText.getText().toString();
 
         if (TextUtils.isEmpty(idProizvoda)){
@@ -255,7 +257,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    public void dodajProizvod(){
+    private void dodajProizvod(){
         final String id = mTraziEditText.getText().toString().trim();
         final String imeProizvoda = mIme.getText().toString().trim();
         final String opisProizvoda = mOpis.getText().toString().trim();
@@ -365,7 +367,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         bDialog.setContentView(v);
         bDialog.show();
 
-        FrameLayout bottomSheet = bDialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+        FrameLayout bottomSheet = bDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         if (bottomSheet != null){
             BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
         }
@@ -389,7 +391,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         mSpremiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spremiBtnAnimacija();
+                animacijaGumbi("SpremiBSD");
                 dodajProizvod();
             }
         });
@@ -397,7 +399,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         mOdustaniBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                odustaniBtnAnimacija();
+                animacijaGumbi("OdustaniBSD");
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -427,12 +429,10 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         TextView mTV = v.findViewById(R.id.TV);
         mTV.setText(provjera);
 
-
-
         mDaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                daBtnAnimacija();
+                animacijaGumbi("Da");
                 if (getActivity() != null){
                     FirebaseAuth.getInstance().signOut();
                     getActivity().finish();
@@ -446,8 +446,8 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         mNeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                neBtnAnimacija();
-                new Timer().schedule(new TimerTask() {
+                animacijaGumbi("Ne");
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         bottomSheetDialog.dismiss();
@@ -459,7 +459,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.odjava_menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
 
     }
@@ -470,52 +470,49 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
-    private void dodajBtnAnimacija() {
-        mDodajBtn.setScaleX((float) 0.9);
-        mDodajBtn.setScaleY((float) 0.9);
-        mDodajBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void azurirajBtnAnimacija() {
-        mAzurirajBtn.setScaleX((float) 0.9);
-        mAzurirajBtn.setScaleY((float) 0.9);
-        mAzurirajBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void traziBtnAnimacija() {
-        mTraziBtn.setScaleX((float) 0.9);
-        mTraziBtn.setScaleY((float) 0.9);
-        mTraziBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void skenirajBtnAnimacija() {
-        mScanBtn.setScaleX((float) 0.9);
-        mScanBtn.setScaleY((float) 0.9);
-        mScanBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void spremiBtnAnimacija() {
-        mSpremiBtn.setScaleX((float) 0.9);
-        mSpremiBtn.setScaleY((float) 0.9);
-        mSpremiBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void odustaniBtnAnimacija() {
-        mOdustaniBtn.setScaleX((float) 0.9);
-        mOdustaniBtn.setScaleY((float) 0.9);
-        mOdustaniBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void daBtnAnimacija() {
-        mDaBtn.setScaleX((float) 0.9);
-        mDaBtn.setScaleY((float) 0.9);
-        mDaBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void neBtnAnimacija() {
-        mNeBtn.setScaleX((float) 0.9);
-        mNeBtn.setScaleY((float) 0.9);
-        mNeBtn.animate().scaleX(1).scaleY(1).start();
+    private void animacijaGumbi(String checker){
+        switch (checker){
+            case "Spremi":
+                mDodajBtn.setScaleX((float) 0.9);
+                mDodajBtn.setScaleY((float) 0.9);
+                mDodajBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Ažuriraj":
+                mAzurirajBtn.setScaleX((float) 0.9);
+                mAzurirajBtn.setScaleY((float) 0.9);
+                mAzurirajBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Skeniraj":
+                mScanBtn.setScaleX((float) 0.9);
+                mScanBtn.setScaleY((float) 0.9);
+                mScanBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Traži":
+                mTraziBtn.setScaleX((float) 0.9);
+                mTraziBtn.setScaleY((float) 0.9);
+                mTraziBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "SpremiBSD":
+                mSpremiBtn.setScaleX((float) 0.9);
+                mSpremiBtn.setScaleY((float) 0.9);
+                mSpremiBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "OdustaniBSD":
+                mOdustaniBtn.setScaleX((float) 0.9);
+                mOdustaniBtn.setScaleY((float) 0.9);
+                mOdustaniBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Da":
+                mDaBtn.setScaleX((float) 0.9);
+                mDaBtn.setScaleY((float) 0.9);
+                mDaBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Ne":
+                mNeBtn.setScaleX((float) 0.9);
+                mNeBtn.setScaleY((float) 0.9);
+                mNeBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+        }
     }
 
     private void otvoriCameraFragment(Fragment CameraFragment){
@@ -527,27 +524,31 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.dodajBtn:
-                dodajBtnAnimacija();
-                spremiBottomSheetDialog();
+                animacijaGumbi("Spremi");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        spremiBottomSheetDialog();
+                    }
+                }, 275);
                 break;
-            case R.id.azurirajBtn:
+            case R.id.azurirajBtnDodaj:
                 mProgressBar.setVisibility(View.VISIBLE);
-                azurirajBtnAnimacija();
+                animacijaGumbi("Ažuriraj");
                 azurirajProizvod();
                 break;
             case R.id.traziBtn:
                 mProgressBar.setVisibility(View.VISIBLE);
-                traziBtnAnimacija();
+                animacijaGumbi("Traži");
                 traziProizvod();
                 break;
             case R.id.skenirajBtn:
-                skenirajBtnAnimacija();
-                new Timer().schedule(new TimerTask() {
+                animacijaGumbi("Skeniraj");
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Fragment fragment = new CameraViewFragment();

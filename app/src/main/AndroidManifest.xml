@@ -29,11 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistracijaActivity" />
-        <activity android:name=".BottomNavActivity"></activity>
-        <activity
-            android:name=".ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".BottomNavActivity" />
     </application>
 
 </manifest>

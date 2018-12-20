@@ -17,4 +17,5 @@
     <color name="colorBlack">#000000</color>
     <color name="offBlack">#555555</color>
     <color name="hintColor">#E2E2E2</color>
+    <color name="transparentDark">#991E1E1E</color>
 </resources>

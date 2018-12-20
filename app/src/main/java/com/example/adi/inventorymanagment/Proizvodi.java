@@ -3,7 +3,6 @@ package com.example.adi.inventorymanagment;
 import com.google.firebase.firestore.Exclude;
 import java.io.Serializable;
 
-
 public class Proizvodi implements Serializable {
 
     @Exclude
@@ -15,6 +14,8 @@ public class Proizvodi implements Serializable {
     private float cijena;
     private String datum;
     private String urlSlike;
+    @Exclude
+    private String key;
 
     public Proizvodi(){
         //potrebno
@@ -72,5 +73,4 @@ public class Proizvodi implements Serializable {
     public String getImageUrl() {
         return urlSlike;
     }
-
 }

@@ -9,7 +9,7 @@
     android:scrollbarThumbVertical="@null"
     android:fillViewport="true">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".LogInActivity">
@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,15 +59,16 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
+                tools:ignore="Autofill"
                 app:layout_constraintBottom_toTopOf="@+id/regLozinkaEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/prijavaTextView" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,11 +98,12 @@
                 android:paddingEnd="10dp"
                 android:paddingTop="5dp"
                 android:textSize="17sp"
+                tools:ignore="Autofill"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container1" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/prijavaBtn"
@@ -140,5 +142,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prijavaBtn" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

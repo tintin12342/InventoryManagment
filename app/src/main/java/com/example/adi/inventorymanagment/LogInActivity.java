@@ -2,9 +2,10 @@ package com.example.adi.inventorymanagment;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -132,31 +133,39 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void otvoriRegistraciju(){
-        Intent intent = new Intent(this, RegistracijaActivity.class);
-        startActivity(intent);
+        final Intent intent = new Intent(this, RegistracijaActivity.class);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(intent);
+            }
+        }, 200);
     }
 
-    private void prijavaBtnAmnimacija(){
-        mPrijava.setScaleX((float) 0.9);
-        mPrijava.setScaleY((float) 0.9);
-        mPrijava.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void registracijaTVAnimacija(){
-        mRegistracija.setScaleX((float) 0.9);
-        mRegistracija.setScaleY((float) 0.9);
-        mRegistracija.animate().scaleX(1).scaleY(1).start();
+    private void animacijaGumbi(String checker){
+        switch (checker){
+            case "Prijava":
+                mPrijava.setScaleX((float) 0.9);
+                mPrijava.setScaleY((float) 0.9);
+                mPrijava.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Registracija":
+                mRegistracija.setScaleX((float) 0.9);
+                mRegistracija.setScaleY((float) 0.9);
+                mRegistracija.animate().scaleX(1).scaleY(1).start();
+                break;
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.prijavaBtn:
-                prijavaBtnAmnimacija();
+                animacijaGumbi("Prijava");
                 prijava();
                 break;
             case R.id.registracijaTV:
-                registracijaTVAnimacija();
+                animacijaGumbi("Registracija");
                 otvoriRegistraciju();
                 break;
         }

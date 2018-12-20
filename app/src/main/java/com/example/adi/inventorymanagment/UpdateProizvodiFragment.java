@@ -1,14 +1,15 @@
 package com.example.adi.inventorymanagment;
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -73,7 +77,7 @@ public class UpdateProizvodiFragment extends Fragment implements View.OnClickLis
         if (getActivity() != null){
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
 
-            mAzurirajBtn = v.findViewById(R.id.azurirajBtn);
+            mAzurirajBtn = v.findViewById(R.id.azurirajBtnDodaj);
             mObrisiBtn = v.findViewById(R.id.obrisiBtn);
             mAzurirajBtn.setTypeface(face);
             mObrisiBtn.setTypeface(face);
@@ -205,14 +209,13 @@ public class UpdateProizvodiFragment extends Fragment implements View.OnClickLis
             }
         }
     }
-
-    public void obrisiProizvod() {
+    //OBRISAT SLIKU KAD SE OBRISE I PROIZVOD
+    private void obrisiProizvod() {
         db = FirebaseFirestore.getInstance();
 
         Bundle bundle = this.getArguments();
         if (bundle != null){
             String documentId = bundle.getString("UdocumentId");
-
             if (documentId != null){
                 FirebaseFirestore.getInstance().collection("Proizvodi")
                         .document(documentId).delete()
@@ -233,6 +236,7 @@ public class UpdateProizvodiFragment extends Fragment implements View.OnClickLis
                                 }
                             }
                         });
+                return;
             }
         }
     }
@@ -249,7 +253,7 @@ public class UpdateProizvodiFragment extends Fragment implements View.OnClickLis
         mDaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                daBtnAnimacija();
+                animacijaGumbi("Da");
                 obrisiProizvod();
                 new Timer().schedule(new TimerTask() {
                     @Override
@@ -262,7 +266,7 @@ public class UpdateProizvodiFragment extends Fragment implements View.OnClickLis
         mNeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                neBtnAnimacija();
+                animacijaGumbi("Ne");
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -271,30 +275,6 @@ public class UpdateProizvodiFragment extends Fragment implements View.OnClickLis
                 }, 250);
             }
         });
-    }
-
-    private void azurirajBtnAnimacija() {
-        mAzurirajBtn.setScaleX((float) 0.9);
-        mAzurirajBtn.setScaleY((float) 0.9);
-        mAzurirajBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void obrisiBtnAnimacija() {
-        mObrisiBtn.setScaleX((float) 0.9);
-        mObrisiBtn.setScaleY((float) 0.9);
-        mObrisiBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void daBtnAnimacija() {
-        mDaBtn.setScaleX((float) 0.9);
-        mDaBtn.setScaleY((float) 0.9);
-        mDaBtn.animate().scaleX(1).scaleY(1).start();
-    }
-
-    private void neBtnAnimacija() {
-        mNeBtn.setScaleX((float) 0.9);
-        mNeBtn.setScaleY((float) 0.9);
-        mNeBtn.animate().scaleX(1).scaleY(1).start();
     }
 
     private void otvoriTraziFragment(){
@@ -309,15 +289,40 @@ public class UpdateProizvodiFragment extends Fragment implements View.OnClickLis
         }
     }
 
+    private void animacijaGumbi(String checker){
+        switch (checker){
+            case "Ažuriraj":
+                mAzurirajBtn.setScaleX((float) 0.9);
+                mAzurirajBtn.setScaleY((float) 0.9);
+                mAzurirajBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Obriši":
+                mObrisiBtn.setScaleX((float) 0.9);
+                mObrisiBtn.setScaleY((float) 0.9);
+                mObrisiBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Da":
+                mDaBtn.setScaleX((float) 0.9);
+                mDaBtn.setScaleY((float) 0.9);
+                mDaBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+            case "Ne":
+                mNeBtn.setScaleX((float) 0.9);
+                mNeBtn.setScaleY((float) 0.9);
+                mNeBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.azurirajBtn:
-                azurirajBtnAnimacija();
+            case R.id.azurirajBtnDodaj:
+                animacijaGumbi("Ažuriraj");
                 azurirajProizvod();
                 break;
             case R.id.obrisiBtn:
-                obrisiBtnAnimacija();
+                animacijaGumbi("Obriši");
                 bottomSheetDialog();
                 break;
         }

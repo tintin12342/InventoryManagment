@@ -2,9 +2,9 @@ package com.example.adi.inventorymanagment;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -119,17 +119,21 @@ public class RegistracijaActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void regBtnAnimacija() {
-        mRegBtn.setScaleX((float) 0.9);
-        mRegBtn.setScaleY((float) 0.9);
-        mRegBtn.animate().scaleX(1).scaleY(1).start();
+    private void animacijaGumbi(String checker) {
+        switch (checker){
+            case "Registracija":
+                mRegBtn.setScaleX((float) 0.9);
+                mRegBtn.setScaleY((float) 0.9);
+                mRegBtn.animate().scaleX(1).scaleY(1).start();
+                break;
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.regBtn:
-                regBtnAnimacija();
+                animacijaGumbi("Registracija");
                 registracijaBazePodataka();
                 break;
 

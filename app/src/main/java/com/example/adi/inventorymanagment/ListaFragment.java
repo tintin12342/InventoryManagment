@@ -5,15 +5,21 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,6 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -56,14 +64,16 @@ public class ListaFragment extends Fragment {
 
         Toolbar toolbar = v.findViewById(R.id.toolbarProizvodi);
         toolbar.setTitle("Lista Proizvoda");
-        if (getActivity() != null){
+        if (getActivity() != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         }
+
+        AppBarLayout appBarLayout = v.findViewById(R.id.appBarLayout);
+        disableImageScroll(appBarLayout);
 
         searchView = v.findViewById(R.id.searchView);
         refreshLayout = v.findViewById(R.id.swipeRefresh);
         recyclerView = v.findViewById(R.id.recycleViewProizvodi);
-        recyclerView.setNestedScrollingEnabled(false);
 
         progressBar = v.findViewById(R.id.progressBar);
         progressBar.getIndeterminateDrawable()
@@ -75,7 +85,21 @@ public class ListaFragment extends Fragment {
         return v;
     }
 
-    private void prikazListe(){
+    private void disableImageScroll(AppBarLayout appBarLayout) {
+        CoordinatorLayout.LayoutParams paramss = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        paramss.setBehavior(new AppBarLayout.Behavior());
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+            @Override
+            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+                return false;
+            }
+        });
+    }
+
+    private void prikazListe() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -95,14 +119,14 @@ public class ListaFragment extends Fragment {
 
                         progressBar.setVisibility(View.GONE);
 
-                        if (!queryDocumentSnapshots.isEmpty()){
+                        if (!queryDocumentSnapshots.isEmpty()) {
 
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
 
-                            for (DocumentSnapshot documentSnapshot : list){
+                            for (DocumentSnapshot documentSnapshot : list) {
 
                                 Proizvodi proizvodi = documentSnapshot.toObject(Proizvodi.class);
-                                if (proizvodi != null){
+                                if (proizvodi != null) {
                                     proizvodi.setDocumentId(documentSnapshot.getId());
                                     proizvodiList.add(proizvodi);
                                 }
@@ -113,7 +137,7 @@ public class ListaFragment extends Fragment {
                 });
     }
 
-    private void swipeRefresh(){
+    private void swipeRefresh() {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -135,14 +159,14 @@ public class ListaFragment extends Fragment {
                                 progressBar.setVisibility(View.GONE);
 
 
-                                if (!queryDocumentSnapshots.isEmpty()){
+                                if (!queryDocumentSnapshots.isEmpty()) {
 
                                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
 
-                                    for (DocumentSnapshot documentSnapshot : list){
+                                    for (DocumentSnapshot documentSnapshot : list) {
 
                                         Proizvodi proizvodi = documentSnapshot.toObject(Proizvodi.class);
-                                        if (proizvodi != null){
+                                        if (proizvodi != null) {
                                             proizvodi.setDocumentId(documentSnapshot.getId());
                                             proizvodiList.add(proizvodi);
                                         }
@@ -156,13 +180,13 @@ public class ListaFragment extends Fragment {
         });
     }
 
-    private void bottomSheetDialog(){
+    private void bottomSheetDialog() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
         View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
         bottomSheetDialog.setContentView(v);
         bottomSheetDialog.show();
 
-        if (getActivity() != null){
+        if (getActivity() != null) {
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
 
             mDaBtn = v.findViewById(R.id.daBtn);
@@ -180,7 +204,7 @@ public class ListaFragment extends Fragment {
             public void onClick(View v) {
                 daBtnAnimacija();
 
-                if (getActivity() != null){
+                if (getActivity() != null) {
                     FirebaseAuth.getInstance().signOut();
                     getActivity().finish();
                     Intent intent = new Intent(getContext(), LogInActivity.class);
@@ -218,8 +242,8 @@ public class ListaFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu_main, menu);
-        super.onCreateOptionsMenu(menu,inflater);
+        inflater.inflate(R.menu.search_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
         MenuItem item = menu.findItem(R.id.search_id);
 
         searchView.setMenuItem(item);
@@ -244,11 +268,11 @@ public class ListaFragment extends Fragment {
         return true;
     }
 
-    private void filter(String text){
+    private void filter(String text) {
         ArrayList<Proizvodi> filtriranaLista = new ArrayList<>();
 
-        for (Proizvodi proizvod : proizvodiList){
-            if (proizvod.getImeProizvoda().toLowerCase().contains(text.toLowerCase())){
+        for (Proizvodi proizvod : proizvodiList) {
+            if (proizvod.getImeProizvoda().toLowerCase().contains(text.toLowerCase())) {
                 filtriranaLista.add(proizvod);
             }
         }
