@@ -1,17 +1,12 @@
 package com.example.adi.inventorymanagment;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,9 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,7 +29,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -48,7 +39,6 @@ public class ListaFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProizvodiAdapter proizvodiAdapter;
     private List<Proizvodi> proizvodiList;
-    private ProgressBar progressBar;
     private MaterialSearchView searchView;
     private SwipeRefreshLayout refreshLayout;
     private Button mDaBtn;
@@ -74,10 +64,6 @@ public class ListaFragment extends Fragment {
         searchView = v.findViewById(R.id.searchView);
         refreshLayout = v.findViewById(R.id.swipeRefresh);
         recyclerView = v.findViewById(R.id.recycleViewProizvodi);
-
-        progressBar = v.findViewById(R.id.progressBar);
-        progressBar.getIndeterminateDrawable()
-                .setColorFilter(Color.parseColor("#083E8E"), PorterDuff.Mode.SRC_IN);
 
         prikazListe();
         swipeRefresh();
@@ -116,15 +102,10 @@ public class ListaFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                        progressBar.setVisibility(View.GONE);
-
                         if (!queryDocumentSnapshots.isEmpty()) {
-
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
 
                             for (DocumentSnapshot documentSnapshot : list) {
-
                                 Proizvodi proizvodi = documentSnapshot.toObject(Proizvodi.class);
                                 if (proizvodi != null) {
                                     proizvodi.setDocumentId(documentSnapshot.getId());
@@ -141,7 +122,6 @@ public class ListaFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                progressBar.setVisibility(View.VISIBLE);
                 proizvodiList = new ArrayList<>();
                 proizvodiAdapter = new ProizvodiAdapter(getContext(), proizvodiList);
 
@@ -155,16 +135,9 @@ public class ListaFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                                progressBar.setVisibility(View.GONE);
-
-
                                 if (!queryDocumentSnapshots.isEmpty()) {
-
                                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-
                                     for (DocumentSnapshot documentSnapshot : list) {
-
                                         Proizvodi proizvodi = documentSnapshot.toObject(Proizvodi.class);
                                         if (proizvodi != null) {
                                             proizvodi.setDocumentId(documentSnapshot.getId());

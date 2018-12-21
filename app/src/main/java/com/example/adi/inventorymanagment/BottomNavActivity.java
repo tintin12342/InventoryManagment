@@ -5,6 +5,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.transition.Fade;
+import androidx.transition.Slide;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 

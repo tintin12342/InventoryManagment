@@ -160,11 +160,20 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
 
                                 if (getActivity() != null){
                                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                                    fragmentTransaction.replace(R.id.fragmentContainer, upFragment);
-                                    fragmentTransaction.addToBackStack(null);
-                                    fragmentTransaction.commit();
+                                    transaction.setCustomAnimations(
+                                            //drugi in
+                                            R.anim.slide_bot_to_top,
+                                            //prvi in
+                                            R.anim.fade_out_trazi,
+                                            //prvi out
+                                            R.anim.fade_in_trazi,
+                                            // drugi out
+                                            R.anim.slide_top_to_bot);
+                                    transaction.addToBackStack(null);
+                                    transaction.replace(R.id.fragmentContainer, upFragment);
+                                    transaction.commit();
                                 }
 
                                 mProgressBar.setVisibility(View.GONE);
@@ -232,11 +241,20 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
 
                                 if (getActivity() != null){
                                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                                    fragmentTransaction.replace(R.id.fragmentContainer, ppFragment);
-                                    fragmentTransaction.addToBackStack(null);
-                                    fragmentTransaction.commit();
+                                    transaction.setCustomAnimations(
+                                            //drugi in
+                                            R.anim.slide_bot_to_top,
+                                            //prvi in
+                                            R.anim.fade_out_trazi,
+                                            //prvi out
+                                            R.anim.fade_in_trazi,
+                                            // drugi out
+                                            R.anim.slide_top_to_bot);
+                                    transaction.addToBackStack(null);
+                                    transaction.replace(R.id.fragmentContainer, ppFragment);
+                                    transaction.commit();
                                 }
 
                                 mProgressBar.setVisibility(View.GONE);
@@ -357,7 +375,6 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
                             }
                         }
                     });
-
         }
     }
 
@@ -518,8 +535,17 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
     private void otvoriCameraFragment(Fragment CameraFragment){
         if (getFragmentManager() != null){
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragmentContainer, CameraFragment);
+            transaction.setCustomAnimations(
+                    //drugi in
+                    R.anim.slide_bot_to_top,
+                    //prvi in
+                    R.anim.fade_out_trazi,
+                    //prvi out
+                    R.anim.fade_in_trazi,
+                    // drugi out
+                    R.anim.slide_top_to_bot);
             transaction.addToBackStack(null);
+            transaction.replace(R.id.fragmentContainer, CameraFragment);
             transaction.commit();
         }
     }

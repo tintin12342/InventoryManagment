@@ -10,11 +10,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Explode;
-import androidx.transition.Fade;
-import androidx.transition.Slide;
-import androidx.transition.TransitionInflater;
-import androidx.transition.TransitionSet;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +83,7 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
 
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(mCtx, android.R.anim.fade_in);
+            Animation animation = AnimationUtils.loadAnimation(mCtx, R.anim.slide_bot_to_top);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }
@@ -119,7 +114,7 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             Vibrator vibrator = (Vibrator) mCtx.getSystemService(Context.VIBRATOR_SERVICE);
@@ -165,12 +160,22 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
                                     ppFragment.setArguments(bundle);
 
                                     FragmentManager fragmentManager = ((FragmentActivity)mCtx).getSupportFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                                    fragmentTransaction.replace(R.id.fragmentContainer, ppFragment);
-                                    fragmentTransaction.addToBackStack(null);
+
                                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                    fragmentTransaction.commit();
+                                    transaction.setCustomAnimations(
+                                            //drugi in
+                                            R.anim.slide_bot_to_top,
+                                            //prvi in
+                                            R.anim.fade_out,
+                                            //prvi out
+                                            R.anim.fade_in,
+                                            // drugi out
+                                            R.anim.slide_top_to_bot);
+                                    transaction.addToBackStack(null);
+                                    transaction.replace(R.id.fragmentContainer, ppFragment);
+                                    transaction.commit();
                                 }
                             }
                         }
