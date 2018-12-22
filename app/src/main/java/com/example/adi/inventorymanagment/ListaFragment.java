@@ -1,5 +1,6 @@
 package com.example.adi.inventorymanagment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Nonnull;
+
 public class ListaFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -59,7 +62,7 @@ public class ListaFragment extends Fragment {
         }
 
         AppBarLayout appBarLayout = v.findViewById(R.id.appBarLayout);
-        disableImageScroll(appBarLayout);
+        disableToolbarScroll(appBarLayout);
 
         searchView = v.findViewById(R.id.searchView);
         refreshLayout = v.findViewById(R.id.swipeRefresh);
@@ -71,12 +74,13 @@ public class ListaFragment extends Fragment {
         return v;
     }
 
-    private void disableImageScroll(AppBarLayout appBarLayout) {
+    private void disableToolbarScroll(AppBarLayout appBarLayout) {
         CoordinatorLayout.LayoutParams paramss = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         paramss.setBehavior(new AppBarLayout.Behavior());
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        //noinspection ConstantConditions
         behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
             @Override
             public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
@@ -155,7 +159,7 @@ public class ListaFragment extends Fragment {
 
     private void bottomSheetDialog() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
-        View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
+        @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
         bottomSheetDialog.setContentView(v);
         bottomSheetDialog.show();
 
@@ -214,7 +218,7 @@ public class ListaFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@Nonnull Menu menu,@Nonnull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem item = menu.findItem(R.id.search_id);
@@ -236,7 +240,7 @@ public class ListaFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@Nonnull MenuItem item) {
         bottomSheetDialog();
         return true;
     }

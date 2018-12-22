@@ -111,7 +111,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="100dp"
-            android:background="@drawable/primary"
+            android:background="@drawable/primary_round"
             android:text="@string/registracija"
             android:textColor="@color/offWhite"
             android:textSize="14sp"

@@ -90,6 +90,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                                             "Korisnik ne postoji",
                                             Toast.LENGTH_SHORT).show();
                                 }else {
+                                    //noinspection ConstantConditions
                                     Toasty.error(
                                             LogInActivity.this,
                                             task.getException().getMessage(),

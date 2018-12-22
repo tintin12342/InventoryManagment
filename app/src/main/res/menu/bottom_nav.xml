@@ -4,16 +4,16 @@
     <item
         android:title="Traži"
         android:id="@+id/navTrazi"
-        android:icon="@drawable/ic_search_black_24dp"/>
+        android:icon="@drawable/trazi_nav"/>
 
     <item
         android:title="Lista"
         android:id="@+id/navLista"
-        android:icon="@drawable/ic_format_list_bulleted_black_24dp"/>
+        android:icon="@drawable/lista_nav"/>
 
     <item
         android:title="Dodaj"
         android:id="@+id/navDodaj"
-        android:icon="@drawable/ic_add_black_24dp"/>
+        android:icon="@drawable/dodaj_nav"/>
 
 </menu>

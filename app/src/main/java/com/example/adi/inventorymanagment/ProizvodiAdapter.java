@@ -45,7 +45,6 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
         this.proizvodiList = proizvodiList;
     }
 
-
     @NonNull
     @Override
     public ProizvodiViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -162,7 +161,6 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
                                     FragmentManager fragmentManager = ((FragmentActivity)mCtx).getSupportFragmentManager();
                                     FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-
                                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                     transaction.setCustomAnimations(
                                             //drugi in
@@ -229,5 +227,4 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
                 .alpha(1f)
                 .start();
     }
-
 }

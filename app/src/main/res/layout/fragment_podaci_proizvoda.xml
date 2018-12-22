@@ -91,7 +91,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginRight="30dp"
-                    android:background="@drawable/primary"
+                    android:background="@drawable/primary_round"
                     android:text="@string/spremi"
                     android:textColor="@color/colorWhite"
                     android:textSize="14sp" />
@@ -147,7 +147,7 @@
                     android:id="@+id/ppId"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="40"
+                    android:layout_weight="42"
                     android:text="@string/id"
                     android:textColor="@color/textColor"
                     android:textSize="18sp"
@@ -276,6 +276,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/kn"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginStart="5dp"
@@ -285,47 +286,6 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linlay6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/layout_proizvodi_background"
-                android:elevation="1dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                android:weightSum="100"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linlay5">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="58"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/sveukupnaCijena"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/ppCijenaSum"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="40"
-                    android:gravity="center_vertical"
-                    android:text="@string/da"
-                    android:textColor="@color/textColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -360,7 +320,7 @@
                     android:id="@+id/ppKolicina"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="40"
+                    android:layout_weight="42"
                     android:text="@string/da"
                     android:textColor="@color/textColor"
                     android:textSize="18sp"
@@ -373,6 +333,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/layout_proizvodi_background"
+                android:elevation="1dp"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linlay5">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="58"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/sveukupnaCijena"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/ppCijenaSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="42"
+                    android:gravity="center_vertical"
+                    android:text="@string/da"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linlay6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
@@ -381,11 +381,11 @@
                 android:orientation="horizontal"
                 android:padding="5dp"
                 android:weightSum="100"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/linlay8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linlay6">
+                app:layout_constraintTop_toBottomOf="@+id/linlay7">
 
                 <TextView
                     android:id="@+id/datumTV"
@@ -400,11 +400,42 @@
                     android:id="@+id/ppDatum"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="40"
+                    android:layout_weight="42"
                     android:text="@string/datum"
                     android:textColor="@color/textColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linlay8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:elevation="1dp"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="100"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linlay6">
+
+                <Button
+                    android:id="@+id/ppObrisiBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginStart="30dp"
+                    android:background="@drawable/crvena_background"
+                    android:text="@string/obrisi"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14sp" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,8 +14,6 @@ public class Proizvodi implements Serializable {
     private float cijena;
     private String datum;
     private String urlSlike;
-    @Exclude
-    private String key;
 
     public Proizvodi(){
         //potrebno

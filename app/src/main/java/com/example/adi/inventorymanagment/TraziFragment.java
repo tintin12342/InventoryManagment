@@ -1,5 +1,6 @@
 package com.example.adi.inventorymanagment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -41,8 +42,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import javax.annotation.Nonnull;
+
 import es.dmoral.toasty.Toasty;
 
 public class TraziFragment extends Fragment implements View.OnClickListener {
@@ -50,7 +52,6 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
     private Button mTraziBtn;
     private Button mScanBtn;
     private Button mDodajBtn;
-    private Button mAzurirajBtn;
     private EditText mTraziEditText;
     private CollectionReference cRef;
 
@@ -88,7 +89,6 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         mTraziBtn = v.findViewById(R.id.traziBtn);
         mScanBtn = v.findViewById(R.id.skenirajBtn);
         mDodajBtn = v.findViewById(R.id.dodajBtn);
-        mAzurirajBtn = v.findViewById(R.id.azurirajBtnDodaj);
         mTraziEditText = v.findViewById(R.id.traziEditText);
 
         mProgressBar.setVisibility(View.GONE);
@@ -102,108 +102,19 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
             mTraziEditText.setText(kod);
         }
 
-        mAzurirajBtn.setOnClickListener(this);
         mTraziBtn.setOnClickListener(this);
         mScanBtn.setOnClickListener(this);
         mDodajBtn.setOnClickListener(this);
         mDodajBtn.setTypeface(face);
         mScanBtn.setTypeface(face);
         mTraziBtn.setTypeface(face);
-        mAzurirajBtn.setTypeface(face);
 
         return v;
-    }
-
-    private void azurirajProizvod(){
-        String idProizvoda = mTraziEditText.getText().toString();
-
-        if (TextUtils.isEmpty(idProizvoda)){
-            mProgressBar.setVisibility(View.GONE);
-            mTraziEditText.setError("Polje je prazno");
-            mTraziEditText.requestFocus();
-            return;
-        }
-
-        final CollectionReference dbProizvodi = db.collection("Proizvodi");
-        dbProizvodi.whereEqualTo("id", idProizvoda)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()){
-
-                            for (QueryDocumentSnapshot documentSnapshots : queryDocumentSnapshots){
-                                Proizvodi proizvodi = documentSnapshots.toObject(Proizvodi.class);
-                                proizvodi.setDocumentId(documentSnapshots.getId());
-
-                                String documentId = proizvodi.getDocumentId();
-                                String id = proizvodi.getId();
-                                String imeProizvoda = proizvodi.getImeProizvoda();
-                                String opisProizvoda = proizvodi.getOpisProizvoda();
-                                int kolicina = proizvodi.getKolicina();
-                                float cijena = proizvodi.getCijena();
-                                String datum = proizvodi.getDatum();
-                                String urlSlike = proizvodi.getImageUrl();
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString("UdocumentId", documentId);
-                                bundle.putCharSequence("Uid", id);
-                                bundle.putCharSequence("UimeProizvoda", imeProizvoda);
-                                bundle.putCharSequence("UopisProizvoda", opisProizvoda);
-                                bundle.putInt("Ukolicina", kolicina);
-                                bundle.putFloat("Ucijena", cijena);
-                                bundle.putCharSequence("Udatum", datum);
-                                bundle.putCharSequence("UurlSlike", urlSlike);
-
-                                UpdateProizvodiFragment upFragment = new UpdateProizvodiFragment();
-                                upFragment.setArguments(bundle);
-
-                                if (getActivity() != null){
-                                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-                                    transaction.setCustomAnimations(
-                                            //drugi in
-                                            R.anim.slide_bot_to_top,
-                                            //prvi in
-                                            R.anim.fade_out_trazi,
-                                            //prvi out
-                                            R.anim.fade_in_trazi,
-                                            // drugi out
-                                            R.anim.slide_top_to_bot);
-                                    transaction.addToBackStack(null);
-                                    transaction.replace(R.id.fragmentContainer, upFragment);
-                                    transaction.commit();
-                                }
-
-                                mProgressBar.setVisibility(View.GONE);
-                            }
-                        } else {
-                            Toasty.error(
-                                    requireContext(),
-                                    "Proizvod ne postoji",
-                                    Toast.LENGTH_SHORT).show();
-                            mProgressBar.setVisibility(View.GONE);
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                e.printStackTrace();
-            }
-        });
-
     }
 
     private void traziProizvod(){
         String idProizvoda = mTraziEditText.getText().toString();
 
-        if (TextUtils.isEmpty(idProizvoda)){
-            mProgressBar.setVisibility(View.GONE);
-            mTraziEditText.setError("Polje je prazno");
-            mTraziEditText.requestFocus();
-            return;
-        }
 
         final CollectionReference dbProizvodi = db.collection("Proizvodi");
         dbProizvodi.whereEqualTo("id", idProizvoda)
@@ -275,18 +186,13 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void dodajProizvod(){
+    private void dodajProizvod(final BottomSheetDialog bDialog){
         final String id = mTraziEditText.getText().toString().trim();
         final String imeProizvoda = mIme.getText().toString().trim();
         final String opisProizvoda = mOpis.getText().toString().trim();
         final String kolicina = mKolicina.getText().toString().trim();
         final String cijena = mCijena.getText().toString().trim();
         final String datum = mDatum.getText().toString().trim();
-
-        if (TextUtils.isEmpty(id)){
-            mTraziEditText.setError("Id je obavezno unjeti");
-            mTraziEditText.requestFocus();
-        }
 
         if (TextUtils.isEmpty(imeProizvoda)){
             mIme.setText("-");
@@ -360,6 +266,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
                                                         "Proizvod je spremljen",
                                                         Toast.LENGTH_SHORT).show();
                                                 mSpremiBtn.setEnabled(true);
+                                                bDialog.dismiss();
 
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
@@ -380,7 +287,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
 
     private void spremiBottomSheetDialog(){
         final BottomSheetDialog bDialog = new BottomSheetDialog(requireContext());
-        View v = getLayoutInflater().inflate(R.layout.dodaj_proizvod_bottom_sheet, null);
+        @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.dodaj_proizvod_bottom_sheet, null);
         bDialog.setContentView(v);
         bDialog.show();
 
@@ -409,7 +316,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 animacijaGumbi("SpremiBSD");
-                dodajProizvod();
+                dodajProizvod(bDialog);
             }
         });
 
@@ -417,22 +324,22 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 animacijaGumbi("OdustaniBSD");
-                new Timer().schedule(new TimerTask() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         bDialog.dismiss();
                     }
-                }, 250);
+                },250);
             }
         });
 
     }
 
     private void bottomSheetDialog(){
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
-        View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
-        bottomSheetDialog.setContentView(v);
-        bottomSheetDialog.show();
+        final BottomSheetDialog bDialog = new BottomSheetDialog(requireContext());
+        @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
+        bDialog.setContentView(v);
+        bDialog.show();
 
         if (getActivity() != null){
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
@@ -467,7 +374,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        bottomSheetDialog.dismiss();
+                        bDialog.dismiss();
                     }
                 }, 250);
             }
@@ -475,14 +382,14 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@Nonnull Menu menu,@Nonnull MenuInflater inflater) {
         inflater.inflate(R.menu.odjava_menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@Nonnull MenuItem item) {
         bottomSheetDialog();
         return true;
     }
@@ -493,11 +400,6 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
                 mDodajBtn.setScaleX((float) 0.9);
                 mDodajBtn.setScaleY((float) 0.9);
                 mDodajBtn.animate().scaleX(1).scaleY(1).start();
-                break;
-            case "Ažuriraj":
-                mAzurirajBtn.setScaleX((float) 0.9);
-                mAzurirajBtn.setScaleY((float) 0.9);
-                mAzurirajBtn.animate().scaleX(1).scaleY(1).start();
                 break;
             case "Skeniraj":
                 mScanBtn.setScaleX((float) 0.9);
@@ -532,9 +434,9 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void otvoriCameraFragment(Fragment CameraFragment){
+    private void otvoriCameraFragment(final Fragment CameraFragment){
         if (getFragmentManager() != null){
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.setCustomAnimations(
                     //drugi in
                     R.anim.slide_bot_to_top,
@@ -555,22 +457,40 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         switch(v.getId()){
             case R.id.dodajBtn:
                 animacijaGumbi("Spremi");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        spremiBottomSheetDialog();
-                    }
-                }, 275);
-                break;
-            case R.id.azurirajBtnDodaj:
-                mProgressBar.setVisibility(View.VISIBLE);
-                animacijaGumbi("Ažuriraj");
-                azurirajProizvod();
+
+                String id = mTraziEditText.getText().toString().trim();
+                if (TextUtils.isEmpty(id)){
+                    mTraziEditText.setError("Id je obavezno unjeti");
+                    mTraziEditText.requestFocus();
+                }else {
+                    mDodajBtn.setEnabled(false);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            spremiBottomSheetDialog();
+                            mDodajBtn.setEnabled(true);
+                        }
+                    }, 275);
+                }
                 break;
             case R.id.traziBtn:
                 mProgressBar.setVisibility(View.VISIBLE);
                 animacijaGumbi("Traži");
-                traziProizvod();
+                String idProizvoda = mTraziEditText.getText().toString();
+
+                if (TextUtils.isEmpty(idProizvoda)){
+                    mProgressBar.setVisibility(View.GONE);
+                    mTraziEditText.setError("Polje je prazno");
+                    mTraziEditText.requestFocus();
+                }else {
+                    mTraziBtn.setEnabled(false);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            traziProizvod();
+                        }
+                    },275);
+                }
                 break;
             case R.id.skenirajBtn:
                 animacijaGumbi("Skeniraj");

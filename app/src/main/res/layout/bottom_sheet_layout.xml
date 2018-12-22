@@ -50,7 +50,7 @@
             android:layout_width="80dp"
             android:layout_height="36dp"
             android:layout_marginStart="50dp"
-            android:background="@drawable/primary"
+            android:background="@drawable/primary_round"
             android:text="@string/da"
             android:textColor="@color/offWhite"
             android:textSize="14sp"

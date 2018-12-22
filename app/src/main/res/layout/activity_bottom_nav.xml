@@ -20,7 +20,7 @@
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
-        app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:itemIconTint="@drawable/bottom_navigation_selected"
         app:itemTextColor="@drawable/bottom_navigation_text"
         app:menu="@menu/bottom_nav"/>
 

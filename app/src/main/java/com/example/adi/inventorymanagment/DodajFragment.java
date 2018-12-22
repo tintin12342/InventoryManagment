@@ -1,5 +1,6 @@
 package com.example.adi.inventorymanagment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -36,6 +37,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.annotation.Nonnull;
+
 import es.dmoral.toasty.Toasty;
 
 public class DodajFragment extends Fragment implements View.OnClickListener {
@@ -215,7 +219,7 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void sakriKeyboard(){
+    private void sakriKeyboard(){
         if (getActivity() != null){
             InputMethodManager imm = (InputMethodManager)
                     getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -228,7 +232,7 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
 
     private void bottomSheetDialog(){
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
-        View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
+        @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
         bottomSheetDialog.setContentView(v);
         bottomSheetDialog.show();
 
@@ -279,14 +283,14 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@Nonnull Menu menu,@Nonnull MenuInflater inflater) {
         inflater.inflate(R.menu.odjava_menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@Nonnull MenuItem item) {
         bottomSheetDialog();
         return true;
     }

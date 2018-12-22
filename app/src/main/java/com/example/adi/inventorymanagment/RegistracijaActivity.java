@@ -102,6 +102,7 @@ public class RegistracijaActivity extends AppCompatActivity implements View.OnCl
                                                 "Email je u uporabi",
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
+                                        //noinspection ConstantConditions
                                         Toast.makeText(RegistracijaActivity.this,
                                                 task.getException().getMessage()
                                                 , Toast.LENGTH_SHORT).show();
@@ -119,7 +120,7 @@ public class RegistracijaActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void animacijaGumbi(String checker) {
+    private void animacijaGumbi(@SuppressWarnings("SameParameterValue") String checker) {
         switch (checker){
             case "Registracija":
                 mRegBtn.setScaleX((float) 0.9);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Upravljanje Zaliha</string>
+    <string name="app_name">Inventar</string>
 
     //button
     <string name="prijava">Prijava</string>
@@ -34,7 +34,7 @@
 
     //textview
     <string name="podaciProizvoda">Podaci Proizvoda</string>
-    <string name="QR">Fokusirajte kameru na QR kod</string>
+    <string name="QR">Fokusirajte kameru na kod</string>
     <string name="kn">KN</string>
     <string name="sveukupnaCijena">Sveukupna \ncijena</string>
     <string name="kod">Kod</string>

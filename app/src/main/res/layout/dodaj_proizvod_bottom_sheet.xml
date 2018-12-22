@@ -247,7 +247,7 @@
             android:layout_width="120dp"
             android:layout_height="36dp"
             android:layout_marginStart="60dp"
-            android:background="@drawable/primary"
+            android:background="@drawable/primary_round"
             android:text="@string/spremi"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"

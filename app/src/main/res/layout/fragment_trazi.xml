@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -56,13 +55,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="45dp"
-        android:background="@drawable/primary"
+        android:background="@drawable/primary_round"
         android:text="@string/trazi"
         android:textColor="@color/offWhite"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/skenirajBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/skenirajBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/dodajBtn"
         app:layout_constraintTop_toBottomOf="@+id/traziEditText"
         app:layout_constraintVertical_bias="1.0" />
 
@@ -74,12 +74,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="45dp"
-        android:background="@drawable/primary"
+        android:background="@drawable/primary_round"
         android:text="@string/skeniraj"
         android:textColor="@color/offWhite"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/traziBtn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/traziEditText"
         app:layout_constraintVertical_bias="1.0" />
@@ -92,35 +92,17 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="45dp"
-        android:background="@drawable/primary_light"
+        android:background="@drawable/primary_light_round"
         android:text="@string/spremi"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/skenirajBtn"
-        app:layout_constraintEnd_toStartOf="@+id/azurirajBtnDodaj"
+        app:layout_constraintEnd_toStartOf="@+id/traziBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/traziEditText"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
-        android:id="@+id/azurirajBtnDodaj"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="45dp"
-        android:background="@drawable/primary_light"
-        android:text="@string/azuriraj"
-        android:textColor="@color/colorWhite"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/traziBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/dodajBtn"
-        app:layout_constraintTop_toBottomOf="@+id/traziEditText"
-        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
