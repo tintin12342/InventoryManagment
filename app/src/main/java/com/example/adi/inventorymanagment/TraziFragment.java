@@ -176,6 +176,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
                                     "Proizvod ne postoji",
                                     Toast.LENGTH_SHORT).show();
                             mProgressBar.setVisibility(View.GONE);
+                            mTraziBtn.setEnabled(true);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -494,11 +495,13 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.skenirajBtn:
                 animacijaGumbi("Skeniraj");
+                mScanBtn.setEnabled(false);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Fragment fragment = new CameraViewFragment();
                         otvoriCameraFragment(fragment);
+                        mScanBtn.setEnabled(true);
                     }
                 }, 200);
                 break;
