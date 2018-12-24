@@ -15,19 +15,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,9 +44,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import javax.annotation.Nonnull;
-
 import es.dmoral.toasty.Toasty;
 
 public class TraziFragment extends Fragment implements View.OnClickListener {
@@ -65,6 +65,9 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
     private Button mOdustaniBtn;
     private Button mDaBtn;
     private Button mNeBtn;
+    private LinearLayout layout1, layout2, layout3, layout4, layout5, layoutKalendar;
+    private CalendarView mCalendar;
+    private Boolean checker = false;
 
     private FirebaseFirestore db;
 
@@ -285,7 +288,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
                     });
         }
     }
-
+    //Bottom sheet dialog za spremanje proizvoda
     private void spremiBottomSheetDialog(){
         final BottomSheetDialog bDialog = new BottomSheetDialog(requireContext());
         @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.dodaj_proizvod_bottom_sheet, null);
@@ -302,6 +305,48 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         mKolicina = v.findViewById(R.id.kolicinaET);
         mCijena = v.findViewById(R.id.cijenaET);
         mDatum = v.findViewById(R.id.datumET);
+        mCalendar = v.findViewById(R.id.calendarView);
+
+        layout1 = v.findViewById(R.id.layout1);
+        layout2 = v.findViewById(R.id.layout2);
+        layout3 = v.findViewById(R.id.layout3);
+        layout4 = v.findViewById(R.id.layout4);
+        layout5 = v.findViewById(R.id.layout5);
+        layoutKalendar = v.findViewById(R.id.layoutKalenar);
+
+        final Button mOtvoriKalendarBtn = v.findViewById(R.id.openCalendarBtn);
+        mOtvoriKalendarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checker == false){
+                    mOtvoriKalendarBtn.setBackgroundResource(R.drawable.minus);
+                    layout1.setVisibility(View.GONE);
+                    layout2.setVisibility(View.GONE);
+                    layout3.setVisibility(View.GONE);
+                    layout4.setVisibility(View.GONE);
+                    layout5.setVisibility(View.GONE);
+                    layoutKalendar.setVisibility(View.VISIBLE);
+
+                    mCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                        @Override
+                        public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                            String datum = dayOfMonth + "-" + (month + 1) + "-" + year;
+                            mDatum.setText(datum);
+                        }
+                    });
+                    checker = true;
+                }else if (checker == true){
+                    checker = false;
+                    mOtvoriKalendarBtn.setBackgroundResource(R.drawable.plus);
+                    layout1.setVisibility(View.VISIBLE);
+                    layout2.setVisibility(View.VISIBLE);
+                    layout3.setVisibility(View.VISIBLE);
+                    layout4.setVisibility(View.VISIBLE);
+                    layout5.setVisibility(View.VISIBLE);
+                    layoutKalendar.setVisibility(View.GONE);
+                }
+            }
+        });
 
         if (getActivity() != null){
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
@@ -335,7 +380,7 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
         });
 
     }
-
+    //Bottom sheet dialog za odjavu
     private void bottomSheetDialog(){
         final BottomSheetDialog bDialog = new BottomSheetDialog(requireContext());
         @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);

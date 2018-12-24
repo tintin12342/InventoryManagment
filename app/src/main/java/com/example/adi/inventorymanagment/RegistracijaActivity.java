@@ -52,24 +52,28 @@ public class RegistracijaActivity extends AppCompatActivity implements View.OnCl
             if (email.isEmpty()){
                 mEmail.setError("Email je obavezno unjeti.");
                 mEmail.requestFocus();
+                mRegBtn.setEnabled(true);
                 return true;
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                 mEmail.setError("Unesite ispravan email.");
                 mEmail.requestFocus();
+                mRegBtn.setEnabled(true);
                 return true;
             }
 
             if (lozinka.isEmpty()){
                 mLozinka.setError("Lozinku je obavezno unjeti.");
                 mLozinka.requestFocus();
+                mRegBtn.setEnabled(true);
                 return true;
             }
 
             if (lozinka.length() < 6){
                 mLozinka.setError("Lozinka mora sadržati najmanje 6 znakova.");
                 mLozinka.requestFocus();
+                mRegBtn.setEnabled(true);
                 return true;
             }
         }
@@ -101,11 +105,13 @@ public class RegistracijaActivity extends AppCompatActivity implements View.OnCl
                                                 RegistracijaActivity.this,
                                                 "Email je u uporabi",
                                                 Toast.LENGTH_SHORT).show();
+                                        mRegBtn.setEnabled(true);
                                     } else {
                                         //noinspection ConstantConditions
                                         Toast.makeText(RegistracijaActivity.this,
                                                 task.getException().getMessage()
                                                 , Toast.LENGTH_SHORT).show();
+                                        mRegBtn.setEnabled(true);
                                     }
 
                                 }
@@ -135,6 +141,7 @@ public class RegistracijaActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId()){
             case R.id.regBtn:
                 animacijaGumbi("Registracija");
+                mRegBtn.setEnabled(false);
                 registracijaBazePodataka();
                 break;
 

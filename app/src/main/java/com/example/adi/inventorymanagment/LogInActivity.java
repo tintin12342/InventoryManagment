@@ -79,22 +79,26 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                                             LogInActivity.this,
                                             "Krivo korisničko ime ili lozinka",
                                             Toast.LENGTH_SHORT).show();
+                                    mPrijava.setEnabled(true);
                                 }else if (task.getException() instanceof FirebaseAuthEmailException){
                                     Toasty.error(
                                             LogInActivity.this,
                                             "Neispravan email",
                                             Toast.LENGTH_SHORT).show();
+                                    mPrijava.setEnabled(true);
                                 }else if (task.getException() instanceof FirebaseAuthInvalidUserException){
                                     Toasty.error(
                                             LogInActivity.this,
                                             "Korisnik ne postoji",
                                             Toast.LENGTH_SHORT).show();
+                                    mPrijava.setEnabled(true);
                                 }else {
                                     //noinspection ConstantConditions
                                     Toasty.error(
                                             LogInActivity.this,
                                             task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
+                                    mPrijava.setEnabled(true);
                                 }
                             }
                         }
@@ -109,24 +113,28 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         if (ime.isEmpty()){
             mKorisnickoIme.setError("Korisničko ime je obavezno unjeti.");
             mKorisnickoIme.requestFocus();
+            mPrijava.setEnabled(true);
             return true;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(ime).matches()){
             mKorisnickoIme.setError("Unesite ispravan email.");
             mKorisnickoIme.requestFocus();
+            mPrijava.setEnabled(true);
             return true;
         }
 
         if (lozinka.isEmpty()){
             mKorisnickaLozinka.setError("Lozinku je obavezno unjeti.");
             mKorisnickaLozinka.requestFocus();
+            mPrijava.setEnabled(true);
             return true;
         }
 
         if (lozinka.length() < 6){
             mKorisnickaLozinka.setError("Lozinka mora sadržati najmanje 6 znakova.");
             mKorisnickaLozinka.requestFocus();
+            mPrijava.setEnabled(true);
             return true;
         }
 
@@ -163,11 +171,19 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.prijavaBtn:
                 animacijaGumbi("Prijava");
+                mPrijava.setEnabled(false);
                 prijava();
                 break;
             case R.id.registracijaTV:
                 animacijaGumbi("Registracija");
+                mRegistracija.setEnabled(false);
                 otvoriRegistraciju();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRegistracija.setEnabled(true);
+                    }
+                },500);
                 break;
         }
     }

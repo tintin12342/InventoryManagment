@@ -40,6 +40,7 @@ import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 
+import androidx.fragment.app.FragmentTransaction;
 import es.dmoral.toasty.Toasty;
 
 public class DodajFragment extends Fragment implements View.OnClickListener {
@@ -53,6 +54,7 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
     private Button mAzurirajBtn;
     private Button mDaBtn;
     private Button mNeBtn;
+    private Button chartBtn;
 
     private FirebaseFirestore db;
 
@@ -74,6 +76,19 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
         mKolicinaEditText = v.findViewById(R.id.kolicinaEditText);
         mCijenaEditText = v.findViewById(R.id.cijenaEditText);
         mDatumEditText = v.findViewById(R.id.datumEditText);
+
+        chartBtn = v.findViewById(R.id.charBtn);
+        chartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChartFragment sFragment = new ChartFragment();
+
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.fragmentContainer, sFragment);
+                transaction.commit();
+            }
+        });
 
         if (getActivity() != null){
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
