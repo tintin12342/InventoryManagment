@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1055391952614:android:19c583985345cb13",
         "android_client_info": {
-          "package_name": "com.example.adi.inventorymanagment"
+          "package_name": "com.nested.tin.inventar"
         }
       },
       "oauth_client": [
