@@ -8,12 +8,12 @@
 
     <activity
         android:id="@+id/logInActivity"
-        android:name="com.example.adi.inventorymanagment.LogInActivity"
+        android:name="com.inventory.tin.inventar.LogInActivity"
         android:label="activity_log_in"
         tools:layout="@layout/activity_log_in" />
     <activity
         android:id="@+id/bottomNavActivity2"
-        android:name="com.example.adi.inventorymanagment.BottomNavActivity"
+        android:name="com.inventory.tin.inventar.BottomNavActivity"
         android:label="activity_bottom_nav"
         tools:layout="@layout/activity_bottom_nav" />
 </navigation>
