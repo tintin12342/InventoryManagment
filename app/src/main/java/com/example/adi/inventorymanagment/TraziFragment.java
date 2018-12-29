@@ -1,6 +1,7 @@
 package com.example.adi.inventorymanagment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -328,6 +330,10 @@ public class TraziFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (checker == false){
+                    InputMethodManager imm = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
                     mOtvoriKalendarBtn.setBackgroundResource(R.drawable.minus);
                     layout1.setVisibility(View.GONE);
                     layout2.setVisibility(View.GONE);
