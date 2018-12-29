@@ -1,11 +1,11 @@
 package com.example.adi.inventorymanagment;
 
 import com.google.firebase.firestore.Exclude;
+
 import java.io.Serializable;
 
 public class Proizvodi implements Serializable {
 
-    @Exclude
     private String documentId;
     private String imeProizvoda;
     private String opisProizvoda;
@@ -55,7 +55,7 @@ public class Proizvodi implements Serializable {
     public float getCijena() {
         return cijena;
     }
-
+    @Exclude
     public String getDocumentId() {
         return documentId;
     }

@@ -5,12 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,9 +23,16 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.ProizvodiViewHolder> {
 
@@ -155,9 +157,9 @@ public class ProizvodiAdapter extends RecyclerView.Adapter<ProizvodiAdapter.Proi
                                     bundle.putFloat("cijenaSum", cijenaSum);
                                     bundle.putCharSequence("datum", datum);
                                     bundle.putCharSequence("urlSlike", urlSlike);
+
                                     PodaciProizvodaFragment ppFragment = new PodaciProizvodaFragment();
                                     ppFragment.setArguments(bundle);
-
                                     FragmentManager fragmentManager = ((FragmentActivity)mCtx).getSupportFragmentManager();
                                     FragmentTransaction transaction = fragmentManager.beginTransaction();
 

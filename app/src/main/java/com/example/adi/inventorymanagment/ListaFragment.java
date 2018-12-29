@@ -4,17 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,20 +11,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class ListaFragment extends Fragment {
 
@@ -46,6 +50,7 @@ public class ListaFragment extends Fragment {
     private SwipeRefreshLayout refreshLayout;
     private Button mDaBtn;
     private Button mNeBtn;
+    private ProgressBar progressBar;
 
     private FirebaseFirestore db;
 
@@ -67,6 +72,7 @@ public class ListaFragment extends Fragment {
         searchView = v.findViewById(R.id.searchView);
         refreshLayout = v.findViewById(R.id.swipeRefresh);
         recyclerView = v.findViewById(R.id.recycleViewProizvodi);
+        progressBar = v.findViewById(R.id.progressBar);
 
         prikazListe();
         swipeRefresh();
@@ -108,6 +114,7 @@ public class ListaFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            progressBar.setVisibility(View.GONE);
 
                             for (DocumentSnapshot documentSnapshot : list) {
                                 Proizvodi proizvodi = documentSnapshot.toObject(Proizvodi.class);
@@ -128,6 +135,7 @@ public class ListaFragment extends Fragment {
             public void onRefresh() {
                 proizvodiList = new ArrayList<>();
                 proizvodiAdapter = new ProizvodiAdapter(getContext(), proizvodiList);
+                progressBar.setVisibility(View.VISIBLE);
 
                 recyclerView.setAdapter(proizvodiAdapter);
 
@@ -146,6 +154,7 @@ public class ListaFragment extends Fragment {
                                         if (proizvodi != null) {
                                             proizvodi.setDocumentId(documentSnapshot.getId());
                                             proizvodiList.add(proizvodi);
+                                            progressBar.setVisibility(View.GONE);
                                         }
                                     }
                                     proizvodiAdapter.notifyDataSetChanged();

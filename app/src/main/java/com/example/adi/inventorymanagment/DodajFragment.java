@@ -5,13 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,13 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -40,7 +36,11 @@ import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 
-import androidx.fragment.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import es.dmoral.toasty.Toasty;
 
 public class DodajFragment extends Fragment implements View.OnClickListener {
@@ -54,7 +54,6 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
     private Button mAzurirajBtn;
     private Button mDaBtn;
     private Button mNeBtn;
-    private Button chartBtn;
 
     private FirebaseFirestore db;
 
@@ -76,19 +75,6 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
         mKolicinaEditText = v.findViewById(R.id.kolicinaEditText);
         mCijenaEditText = v.findViewById(R.id.cijenaEditText);
         mDatumEditText = v.findViewById(R.id.datumEditText);
-
-        chartBtn = v.findViewById(R.id.charBtn);
-        chartBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChartFragment sFragment = new ChartFragment();
-
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.addToBackStack(null);
-                transaction.replace(R.id.fragmentContainer, sFragment);
-                transaction.commit();
-            }
-        });
 
         if (getActivity() != null){
             Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Raleway-SemiBold.ttf");
@@ -174,7 +160,7 @@ public class DodajFragment extends Fragment implements View.OnClickListener {
                             if (!queryDocumentSnapshots.isEmpty()) {
                                 Toasty.warning(
                                         requireContext(),
-                                        "Proizvod vec postoji",
+                                        "Proizvod već postoji",
                                         Toast.LENGTH_SHORT).show();
                             }
                             else {
