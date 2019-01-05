@@ -57,7 +57,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="45dp"
-        android:background="@drawable/primary_round"
+        android:background="@drawable/primary_light_round"
         android:text="@string/trazi"
         android:textColor="@color/offWhite"
         android:textSize="14sp"
